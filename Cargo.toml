@@ -6,7 +6,7 @@ description = """A pure-Rust implementation of Ed448 and Curve448 and Decaf.
 This crate also includes signing and verifying of Ed448 signatures, and x448.
 """
 documentation = "https://docs.rs/cx448"
-homepage = "https://docs.rs/ed448-goldilocks/"
+homepage = "https://docs.rs/cx448"
 keywords = ["cryptography", "decaf", "ed448", "ed448-goldilocks", "x448"]
 license = "BSD-3-Clause"
 readme = "README.md"
@@ -15,7 +15,7 @@ edition = "2021"
 rust-version = "1.83"
 
 [dependencies]
-crypto-bigint = { version = "0.5", features = ["generic-array"], default-features = false }
+crypto-bigint = { version = "0.5.5", features = ["generic-array"], default-features = false }
 crypto_signature = { version = "2.2", default-features = false, features = ["digest", "rand_core"], optional = true, package = "signature" }
 elliptic-curve = { version = "0.13", features = ["arithmetic", "bits", "hash2curve", "jwk", "pkcs8", "pem", "sec1"] }
 pkcs8 = { version = "0.10", features = ["alloc"], optional = true }
@@ -23,7 +23,7 @@ rand_core = { version = "0.6", default-features = false }
 serdect = { version = "0.3.0", optional = true }
 sha3 = { version = "0.10", default-features = false }
 subtle = { version = "2.6", default-features = false }
-zeroize = { version = "1.8", default-features = false, features = ["derive"], optional = true }
+zeroize = { version = "1.8", default-features = false, optional = true }
 
 [features]
 default = ["std", "signing", "pkcs8"]
