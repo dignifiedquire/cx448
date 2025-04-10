@@ -23,9 +23,11 @@ impl From<&Secret> for PublicKey {
 }
 
 /// A PublicKey is a point on Curve448.
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub struct PublicKey(MontgomeryPoint);
 
 /// A Secret is a Scalar on Curve448.
+#[derive(Copy, Clone)]
 pub struct Secret([u8; 56]);
 
 #[cfg(feature = "zeroize")]
