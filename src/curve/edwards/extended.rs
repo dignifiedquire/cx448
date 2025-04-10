@@ -732,10 +732,8 @@ impl EdwardsPoint {
     ///
     /// # Return
     ///
-    /// * `true` if `self` has zero torsion component and is in the
-    ///    prime-order subgroup;
-    /// * `false` if `self` has a nonzero torsion component and is not
-    ///    in the prime-order subgroup.
+    /// * `true` if `self` has zero torsion component and is in the prime-order subgroup;
+    /// * `false` if `self` has a nonzero torsion component and is not in the prime-order subgroup.
     pub fn is_torsion_free(&self) -> Choice {
         (self * BASEPOINT_ORDER).ct_eq(&Self::IDENTITY)
     }

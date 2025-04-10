@@ -146,7 +146,7 @@ impl Secret {
 
 fn slice_to_array(bytes: &[u8]) -> [u8; 56] {
     let mut array: [u8; 56] = [0; 56];
-    array.copy_from_slice(&bytes);
+    array.copy_from_slice(bytes);
     array
 }
 
@@ -154,7 +154,8 @@ fn slice_to_array(bytes: &[u8]) -> [u8; 56] {
 /// Currently, the only reason I can think of for using the raw function is FFI.
 /// Option is FFI safe[1]. So we can still maintain that the invariant that
 /// we do not return a low order point.
-/// [1] https://github.com/rust-lang/nomicon/issues/59
+///
+/// [1]: <https://github.com/rust-lang/nomicon/issues/59>
 pub fn x448(scalar_bytes: [u8; 56], point_bytes: [u8; 56]) -> Option<[u8; 56]> {
     let point = PublicKey::from_bytes(&point_bytes)?;
     let scalar = Secret::from(scalar_bytes).as_scalar();
@@ -236,7 +237,7 @@ mod test {
         // If by chance, a low order point is generated, the clamping function will
         // remove it.
         let low_order = alice_pub.0.is_low_order() || bob_pub.0.is_low_order();
-        assert!(low_order == false);
+        assert!(!low_order);
 
         // Both Alice and Bob perform the DH key exchange.
         // As mentioned above, we unwrap because both Parties are using the API correctly.
@@ -304,7 +305,7 @@ mod test {
             expected: [u8; 56],
         }
 
-        let test_vectors = std::vec![
+        let test_vectors = [
             Test {
                 secret: [
                     0x3d, 0x26, 0x2f, 0xdd, 0xf9, 0xec, 0x8e, 0x88, 0x49, 0x52, 0x66, 0xfe, 0xa1,

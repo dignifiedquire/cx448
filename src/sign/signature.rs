@@ -152,7 +152,7 @@ impl TryFrom<Signature> for InnerSignature {
 
     fn try_from(signature: Signature) -> Result<Self, Self::Error> {
         let s_bytes = ScalarBytes::from_slice(&signature.s[..]);
-        let s = Option::from(Scalar::from_canonical_bytes(&s_bytes))
+        let s = Option::from(Scalar::from_canonical_bytes(s_bytes))
             .ok_or(SigningError::InvalidSignatureSComponent)?;
         let r = Option::from(signature.r.decompress())
             .ok_or(SigningError::InvalidSignatureRComponent)?;

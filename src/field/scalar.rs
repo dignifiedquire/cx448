@@ -355,7 +355,7 @@ impl TryFrom<&[u8]> for Scalar {
             return Err("invalid byte length");
         }
         let scalar_bytes = ScalarBytes::from_slice(bytes);
-        Option::<Scalar>::from(Scalar::from_canonical_bytes(&scalar_bytes))
+        Option::<Scalar>::from(Scalar::from_canonical_bytes(scalar_bytes))
             .ok_or("scalar was not canonically encoded")
     }
 }
@@ -1061,7 +1061,7 @@ mod test {
 
         // 2^912-1 should become 0x2939f823b7292052bcb7e4d070af1a9cc14ba3c47c44ae17cf72c985bb24b6c520e319fb37a63e29800f160787ad1d2e11883fa931e7de81
         let bytes = WideScalarBytes::from_slice(&hex!("ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"));
-        let s = Scalar::from_bytes_mod_order_wide(&bytes);
+        let s = Scalar::from_bytes_mod_order_wide(bytes);
         let mut bytes = ScalarBytes::from(hex!("002939f823b7292052bcb7e4d070af1a9cc14ba3c47c44ae17cf72c985bb24b6c520e319fb37a63e29800f160787ad1d2e11883fa931e7de81"));
         bytes.reverse();
         let reduced = Scalar::from_canonical_bytes(&bytes).unwrap();
