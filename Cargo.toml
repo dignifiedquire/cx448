@@ -19,7 +19,7 @@ crypto-bigint = { version = "0.5.5", features = ["generic-array"], default-featu
 crypto_signature = { version = "2.2", default-features = false, features = ["digest", "rand_core"], optional = true, package = "signature" }
 elliptic-curve = { version = "0.13", features = ["arithmetic", "bits", "hash2curve", "jwk", "pkcs8", "pem", "sec1"] }
 pkcs8 = { version = "0.10", features = ["alloc"], optional = true }
-rand_core = { version = "0.6", default-features = false }
+rand_core = { version = "0.9", default-features = false }
 serdect = { version = "0.3.0", optional = true }
 sha3 = { version = "0.10", default-features = false }
 subtle = { version = "2.6", default-features = false }
