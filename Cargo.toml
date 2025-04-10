@@ -1,6 +1,6 @@
 [package]
 name = "cx448"
-version = "0.1.0"
+version = "0.1.1"
 categories = ["cryptography"]
 description = """A pure-Rust implementation of Ed448 and Curve448 and Decaf.
 This crate also includes signing and verifying of Ed448 signatures, and x448.
