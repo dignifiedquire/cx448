@@ -10,7 +10,10 @@ use elliptic_curve::{
     generic_array::GenericArray as Array,
     hash2curve::{FromOkm, MapToCurve},
 };
-use subtle::{Choice, ConditionallyNegatable, ConditionallySelectable, ConstantTimeEq};
+use subtle::{
+    Choice, ConditionallyNegatable, ConditionallySelectable, ConstantTimeEq, ConstantTimeLess,
+    CtOption,
+};
 
 #[cfg(feature = "zeroize")]
 use zeroize::DefaultIsZeroes;
@@ -255,6 +258,13 @@ impl FieldElement {
 
     pub fn from_bytes(bytes: &[u8; 56]) -> Self {
         Self(ConstMontyType::new(&U448::from_le_slice(bytes)))
+    }
+
+    /// Decodes a field element, returning `None` if the value is not less than the modulus.
+    pub(crate) fn from_repr(bytes: &[u8; 56]) -> CtOption<Self> {
+        const P: U448 = U448::from_be_hex("fffffffffffffffffffffffffffffffffffffffffffffffffffffffeffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        let value = U448::from_le_slice(bytes);
+        CtOption::new(Self(ConstMontyType::new(&value)), value.ct_lt(&P))
     }
 
     pub fn double(&self) -> Self {

@@ -458,6 +458,54 @@ mod tests {
         }
     }
 
+    // Wycheproof testvectors_v1/ed448_test.json (commit d17cc89): tcId 1 is valid,
+    // tcIds 63, 64 and 65 set a bit among bits 448 to 454 of R and are invalid.
+    #[test]
+    fn wycheproof_ed448_unused_bits_in_r() {
+        const PK: &str = "419610a534af127f583b04818cdb7f0ff300b025f2e01682bcae33fd691cee039511df0cddc690ee978426e8b38e50ce5af7dcfba50f704c00";
+        let cases: [(&str, &str, &str, bool); 4] = [
+            (
+                "",
+                "cf7953007666e12f73af9ec92e3e018da5ee5a8d5b17f5100a354c58f1d5f4bb37ab835c52f72374c72d612689149cf6d36a70db6dc5a6c400b597348e0e31e51e65bb144e63c892a367b4c055c036aa6cd7e728cdd2a098963bda863903e6dd025b5a5d891209f4e28537694804e50b0800",
+                "tcId 1",
+                true,
+            ),
+            (
+                "313233343030",
+                "5db94c53101f521f6c1f43b60ea4d7e06fbd49c2e8afaf4fcc289e645e0880a87b8e55858df4cf2291a7303ffda446b82a117b4dd408cff2811adf92201088e051ee48b57aecf46edfc68e5baeed5ae4910ba5681d370f75ab593811e18293ef0808581c254196bcbf2b4c454136a6711b00",
+                "tcId 63",
+                false,
+            ),
+            (
+                "313233343030",
+                "5db94c53101f521f6c1f43b60ea4d7e06fbd49c2e8afaf4fcc289e645e0880a87b8e55858df4cf2291a7303ffda446b82a117b4dd408cff2825e06c3999e8308be439c40940b0075d3e4f65147c1608cbe6e9c432e33bed6686f9393ae2568f0ad60febcb4b6179c0d90d034e7c3c4681000",
+                "tcId 64",
+                false,
+            ),
+            (
+                "313233343030",
+                "5db94c53101f521f6c1f43b60ea4d7e06fbd49c2e8afaf4fcc289e645e0880a87b8e55858df4cf2291a7303ffda446b82a117b4dd408cff2c02456bbd141df048dbf1843be6d5fef402483314c2af547b361a09f3319489eaede43404df9faf634c1298d678b5261c808b0be3726013e3900",
+                "tcId 65",
+                false,
+            ),
+        ];
+
+        let mut pk_bytes = [0u8; PUBLIC_KEY_LENGTH];
+        hex::decode_to_slice(PK, &mut pk_bytes).unwrap();
+        let pkey = VerifyingKey::from_bytes(&pk_bytes).unwrap();
+
+        for (msg, sig, name, valid) in cases {
+            let msg = hex::decode(msg).unwrap();
+            let sig_bytes = hex::decode(sig).unwrap();
+            // A non-canonical R is refused either when the signature is parsed or when it is verified.
+            let accepted = Signature::try_from(&sig_bytes[..])
+                .map_err(|_| ())
+                .and_then(|sig| pkey.verify_raw(&sig, &msg).map_err(|_| ()))
+                .is_ok();
+            assert_eq!(accepted, valid, "{name}");
+        }
+    }
+
     #[cfg(feature = "serde")]
     #[test]
     fn serialization() {
